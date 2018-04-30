@@ -1,0 +1,8 @@
+twdocs.settings:
+  path: 'admin/config/content/twdocs'
+  defaults:
+    _form: '\Drupal\twdocs\Form\TWDocsSettingsForm'
+    _title: 'TW Docs Settings'
+  requirements:
+    _permission: 'administer site configuration'
+

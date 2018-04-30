@@ -1,0 +1,14 @@
+twdocs.settings:
+  type: config_object
+  label: "Setting for twdocs module"
+  mapping:
+    baseuri:
+      type: string
+      label: 'Base URI for Document Store'
+    serviceid:
+      type: string
+      label: 'The service identifier the module should use when talking to the media manager.'
+    apikey:
+      type: string
+      label: 'The API key needed for hashing the request for authentication purposes.'
+

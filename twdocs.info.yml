@@ -1,0 +1,8 @@
+name: TW Docs
+description: Provides a &lt;document&gt; tag that can be used for uplaoding media content and a semantic representation of that media
+core: 8.x
+package: "RDF"
+version: "1.0"
+type: module
+configure: twdocs.settings
+php: 5.6
