@@ -4,10 +4,15 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
+include_once('DrupalTWDocs.inc');
+
 function twdocs_entity_delete(EntityInterface $entity) {
 }
 
 function twdocs_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if($build['body'] && $build['body'][0]) {
+    $build['body'][0]["#text"] = TWDocs::$engine->render( 1, $build['body'][0]["#text"] );
+  }
 }
 
 function twdocs_entity_update(EntityInterface $entity) {
