@@ -92,11 +92,18 @@ class DrupalTWDocs extends TWDocs {
     TWDocs::getLogger()->enableDebug($val) ;
   }
   
-  public function getBaseURI() {
-    return $this->config->get('baseuri', 'http://tw.rpi.edu/media');
+  public function getMediaURI() {
+    return $this->config->get('mediauri', 'http://tw.rpi.edu/media');
   }
 
-  public function setBaseURI($val) {
+  public function setMediaURI($val) {
+  }
+  
+  public function getInstanceURI() {
+    return $this->config->get('instanceuri', 'http://tw.rpi.edu/media');
+  }
+
+  public function setInstanceURI($val) {
   }
   
   public function getServiceID() {

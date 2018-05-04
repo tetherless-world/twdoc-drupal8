@@ -1,4 +1,5 @@
-baseuri: 'http://tw.rpi.edu/media'
+mediauri: 'http://tw.rpi.edu/media'
+instanceuri: 'http://tw.rpi.edu/media'
 serviceid: 'tw.rpi.edu'
 apikey: 'xxxx'
 defaultdocpage: 'https://tw.rpi.edu/web/doc/Document'

@@ -43,11 +43,17 @@ class TWDocsSettingsForm extends ConfigFormBase {
       '#collapsible' => FALSE,
     ];
 
-    $form['settings']['baseuri'] = [
+    $form['settings']['mediauri'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Base URI for Document Store:'),
-      '#default_value' => $config->get('baseuri'),
-      '#description' => $this->t('Location where media will be uploaded and semantic information stored'),
+      '#default_value' => $config->get('mediauri'),
+      '#description' => $this->t('Location where media will be uploaded'),
+    ];
+    $form['settings']['instanceuri'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Base Instance URI:'),
+      '#default_value' => $config->get('instanceuri'),
+      '#description' => $this->t('Base URI of semantic instance data stored for the media'),
     ];
     $form['settings']['serviceid'] = [
       '#type' => 'textfield',
@@ -76,8 +82,11 @@ class TWDocsSettingsForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     // Check if automatically managed style sheet is posible.
-    if ($form_state->getValue('baseuri') == "") {
-      $form_state->setErrorByName('baseuri', $this->t('The base URI for media must be specified in order to upload media and store information'));
+    if ($form_state->getValue('mediauri') == "") {
+      $form_state->setErrorByName('mediauri', $this->t('The base URI for media must be specified in order to upload media'));
+    }
+    if ($form_state->getValue('instanceuri') == "") {
+      $form_state->setErrorByName('instanceuri', $this->t('The base URI for media instance information'));
     }
     if ($form_state->getValue('serviceid') == "") {
       $form_state->setErrorByName('serviceid', $this->t('The service ID is required in order to upload media and store information'));
@@ -97,7 +106,8 @@ class TWDocsSettingsForm extends ConfigFormBase {
     $errors = $form_state->getErrors();
     if (count($errors) == 0) {
       $config = $this->config('twdocs.settings');
-      $config->set('baseuri', $form_state->getValue('baseuri'))
+      $config->set('mediauri', $form_state->getValue('mediauri'))
+        ->set('instanceuri', $form_state->getValue('instanceuri'))
         ->set('serviceid', $form_state->getValue('serviceid'))
         ->set('apikey', $form_state->getValue('apikey'))
         ->set('defaultdocpage', $form_state->getValue('defaultdocpage'));
