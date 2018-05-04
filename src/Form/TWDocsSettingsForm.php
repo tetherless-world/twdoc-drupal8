@@ -61,6 +61,12 @@ class TWDocsSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('apikey'),
       '#description' => $this->t('The API key needed for hashing the request for authentication purposes.'),
     ];
+    $form['settings']['defaultdocpage'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default Document Page:'),
+      '#default_value' => $config->get('defaultdocpage'),
+      '#description' => $this->t('The default document page when one does not exist for the media file.'),
+    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -79,6 +85,9 @@ class TWDocsSettingsForm extends ConfigFormBase {
     if ($form_state->getValue('apikey') == "") {
       $form_state->setErrorByName('apikey', $this->t('The api key is required in order to upload media and store information'));
     }
+    if ($form_state->getValue('defaultdocpage') == "") {
+      $form_state->setErrorByName('defaultdocpage', $this->t('The default document page is required in order to display semantic representation of the media'));
+    }
   }
 
   /**
@@ -90,7 +99,8 @@ class TWDocsSettingsForm extends ConfigFormBase {
       $config = $this->config('twdocs.settings');
       $config->set('baseuri', $form_state->getValue('baseuri'))
         ->set('serviceid', $form_state->getValue('serviceid'))
-        ->set('apikey', $form_state->getValue('apikey'));
+        ->set('apikey', $form_state->getValue('apikey'))
+        ->set('defaultdocpage', $form_state->getValue('defaultdocpage'));
       $config->save();
       parent::submitForm($form, $form_state);
     }

@@ -11,4 +11,7 @@ twdocs.settings:
     apikey:
       type: string
       label: 'The API key needed for hashing the request for authentication purposes.'
+    defaultdocpage:
+      type: string
+      label: 'The default document page when one does not exist for the media file.'
 
