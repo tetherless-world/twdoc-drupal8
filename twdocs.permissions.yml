@@ -1,0 +1,4 @@
+'twdocs upload':
+  title: 'Upload files'
+  description: 'Gives permission to a user to upload files using &lt;document&gt; tag'
+
