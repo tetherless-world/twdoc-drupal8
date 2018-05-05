@@ -126,6 +126,10 @@ class DrupalTWDocs extends TWDocs {
 
   public function setDefaultDocPage($val) {
   }
+
+  public function canUpload() {
+    return \Drupal::currentUser()->hasPermission('twdocs upload');
+  }
 }
 
 // Could have just used the DrupalTWDocs static function init to
