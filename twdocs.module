@@ -27,3 +27,7 @@ function twdocs_help($route_name, RouteMatchInterface $route_match) {
   }
 }
 
+function twdocs_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'twdocs/twdocs';
+}
+
