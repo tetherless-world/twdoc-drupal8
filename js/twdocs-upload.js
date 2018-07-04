@@ -1,30 +1,34 @@
-const twDialog = '<div> \
+const twDialog = (alt, username) => { return `<div> \
             <input class="tw-file-attach" type="button" value="Select File" onclick="twForceClick(\'fileToUpload\')" /> \
         </div> \
         <div id="file-line" class="tw-file-line-name"></div> \
         <input class="tw-file-selection" type="file" name="fileToUpload" id="fileToUpload" onchange="twFileChanged(\'file-line\')" /> \
         <div> \
-            <button class="tw-file-submit" onclick="((event) => twDoUpload(event))(event)">Upload File</button> \
-        </div>'
+            <button class="tw-file-submit" onclick="((event) => twDoUpload('${alt}', '${username}', event))(event)">Upload File</button> \
+        </div>`
+}
+
 let twUploadFile
 
-function twOpenDialog(id, event) {
+function twOpenDialog(id, alt, username, event) {
     twCloseDialog()
     const element = document.querySelector(`#${id}`)
     const dom = document.createElement('div')
     dom.classList = 'tw-dialog'
     dom.setAttribute('style', `top:${event.clientY}px;left:${event.clientX}px`)
-    dom.innerHTML = twDialog
+    dom.innerHTML = twDialog(alt, username)
     element.appendChild(dom)
 }
 
 function twCloseDialog() {
     const element = document.querySelector('.tw-dialog')
+    let parent
     if (element) {
-        const parent = element.parentElement
+        parent = element.parentElement
         parent.removeChild(element)
     }
     twUploadFile = null
+    return parent
 }
 
 function twForceClick(id) {
@@ -41,17 +45,21 @@ function twFileChanged(id) {
     }
 }
 
-function twArrayBufferToBase64(buffer) {
+function twArrayBufferToString(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);
     var len = bytes.byteLength;
     for (var i = 0; i < len; i++) {
         binary += String.fromCharCode(bytes[i]);
     }
-    return window.btoa(binary);
+    return binary
 }
 
-function twDoUpload(e) {
+function twArrayBufferToBase64(buffer) {
+    return window.btoa(twArrayBufferToString(buffer));
+}
+
+function twDoUpload(alt, username, e) {
     if (twUploadFile) {
         e.preventDefault()
         const reader = new FileReader()
@@ -59,17 +67,35 @@ function twDoUpload(e) {
         reader.onload = (src) => {
             const data = new FormData()
             data.append('name', twUploadFile.name)
+            data.append('alt', alt)
+            data.append('username', username)
             data.append('source', twArrayBufferToBase64(src.target.result))
-            fetch('/~westp/newlook/something.php',
+            let errObj = ''
+            fetch('/~westp/media/submit.php',
                 { method: 'post', body: data }
-            ).then((response) => {
-                if (response.status === 200) {
-                    console.log('good')
-                } else {
-                    console.log('bad')
+            ).then(async (response) => {
+                const element = twCloseDialog()
+                const reader = response.body.getReader()
+                const getContents = () => {
+                  return reader.read().then(({done, value}) => {
+                    if(done) {
+                      return
+                    } else {
+                      errObj = errObj + twArrayBufferToString(value)
+                      return getContents()
+                    }
+                  })
                 }
-                twCloseDialog()
-            }).catch((((err) => console.log('err = ', err))))
+                await getContents()
+                const responseObj = JSON.parse(errObj)
+                if (response.status !== 200) {
+                  alert(`${responseObj.error}`)
+                } else {
+                  alert('Do something with the result')
+                }
+            }).catch((((err) => {
+              alert('Unable to upload the file, internal error')
+            })))
         }
     }
 }
