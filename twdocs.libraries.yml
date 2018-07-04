@@ -1,0 +1,8 @@
+twdocs:
+  version: 1.0
+  js:
+    js/twdocs-upload.js: {}
+  css:
+    theme:
+      css/twdocs-upload.css: {}
+
